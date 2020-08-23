@@ -28,7 +28,7 @@ for file_fullname in file_list:
     file_ext = os.path.splitext(file_name)
     new_name = os.path.join(file_path,str(index)+file_ext[1].lower())
 
-    os.rename(file_fullname, new_name)
+    # os.rename(file_fullname, new_name)
 
     print(index, ":", file_fullname, "|", file_ext, "->", new_name)
     
