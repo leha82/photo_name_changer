@@ -7,3 +7,9 @@ with open('config.json') as json_file:
 
     dir = json_data["directory"]
     format = json_data["name_format"]
+
+
+print(dir)
+print(format)
+
+

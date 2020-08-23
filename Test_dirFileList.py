@@ -1,7 +1,5 @@
-# Photo Filename Changer
-# 사진 파일이름 변환기
-# 사진과 파일 이름의 메타데이터를 읽어와 사진을 찍은 시간 순으로 정렬합니다.
-# 사진 json 포맷에 있는 내용대로  파일 이름을 수정하는 프로그램입니다.
+# Test for getting file list from given directory
+# Test for rename files
 
 import os
 
@@ -30,7 +28,10 @@ for file_fullname in file_list:
     file_ext = os.path.splitext(file_name)
     new_name = os.path.join(file_path,str(index)+file_ext[1].lower())
 
-    # os.rename(file_fullname, new_name)
+    os.rename(file_fullname, new_name)
 
     print(index, ":", file_fullname, "|", file_ext, "->", new_name)
     
+
+    
+
