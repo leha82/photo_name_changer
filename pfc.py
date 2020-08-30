@@ -43,9 +43,13 @@ for fullName in fileList:
     newFilename = modifiedName + fileExt[1].lower()
     newFullName = os.path.join(filePath,newFilename)
 
-    newFileList.append([newFullName, fullName])
+    tempFileName = str(index) + fileExt[1].lower()
+    tempFullName = os.path.join(filePath,tempFileName)
 
-    print(index, ":", fullName, "->", newFullName)
+    os.rename(fullName, tempFullName)
+    newFileList.append([newFullName, tempFullName])
+
+    print(index, ":", fullName, "->", tempFullName)
     index+=1
 
 newFileList.sort()
@@ -55,7 +59,7 @@ count = 0
 
 for i in range(0, len(newFileList)):
     newName = newFileList[i][0]
-    originalName = newFileList[i][1]
+    tempName = newFileList[i][1]
     filePath = os.path.dirname(newName)
     fileName = os.path.basename(newName)
     fileExt = os.path.splitext(fileName)
@@ -73,7 +77,7 @@ for i in range(0, len(newFileList)):
         newFileName = fileExt[0] + '_' + f'{str(count):0>2}' + fileExt[1].lower()
         newName = os.path.join(filePath, newFileName)
     
-    print(i, "BaseName: ", fileName, " NewName: ", newName, " OriginalName: ", originalName)
-    os.rename(originalName, newName)
+    print(i, "[", fileName , "]:", tempName, "->", newName)
+    os.rename(tempName, newName)
 
     lastName = fileName
