@@ -4,33 +4,76 @@
 # 사진 json 포맷에 있는 내용대로  파일 이름을 수정하는 프로그램입니다.
 
 import os
+import FileModule as fmodule
+import PhotoModule as pmodule
+
+jsonFile = "config.json"
+
+# get configuration directory and format from json file
+pathDir, fileFormat = fmodule.getConfig(jsonFile)
 
 # open file path and find all files int the path
-path_dir = "C:\\Users\\Owner\\Desktop\\photo\\test_file"
-files = os.listdir(path_dir)
+# pathDir = "C:\\Users\\Owner\\Desktop\\photo\\test_file"
+files = os.listdir(pathDir)
 
 # print(type(files))
 
-# check the files and make file_list when it is a file, not directory
+# check the files and make fileList when it is a file, not directory
 
-file_list = []
+fileList = []
 
-for file_name in files:
-    path_name = os.path.join(path_dir,file_name)
-    if os.path.isfile(path_name):
-        file_list.append(path_name)
+for fileName in files:
+    pathName = os.path.join(pathDir,fileName)
+    if os.path.isfile(pathName):
+        fileList.append(pathName)
 
 # rename the files to "1.jpg, 2.jpg ..."
 
-index = 0
-for file_fullname in file_list:
-    index += 1
-    file_path = os.path.dirname(file_fullname)
-    file_name = os.path.basename(file_fullname)
-    file_ext = os.path.splitext(file_name)
-    new_name = os.path.join(file_path,str(index)+file_ext[1].lower())
+newFileList = []
 
-    # os.rename(file_fullname, new_name)
+index = 1
+for fullName in fileList:
+    filePath = os.path.dirname(fullName)
+    fileName = os.path.basename(fullName)
+    fileExt = os.path.splitext(fileName)
 
-    print(index, ":", file_fullname, "|", file_ext, "->", new_name)
+    dateTime = pmodule.getLatestDateTime(fullName)
+
+    modifiedName = fmodule.getFilenamebyFormat(dateTime, fileFormat)
+    newFilename = modifiedName + fileExt[1].lower()
+    newFullName = os.path.join(filePath,newFilename)
+
+    newFileList.append([newFullName, fullName])
+
+    print(index, ":", fullName, "->", newFullName)
+    index+=1
+
+newFileList.sort()
+
+lastName = ""
+count = 0
+
+for i in range(0, len(newFileList)):
+    newName = newFileList[i][0]
+    originalName = newFileList[i][1]
+    filePath = os.path.dirname(newName)
+    fileName = os.path.basename(newName)
+    fileExt = os.path.splitext(fileName)
+
+    if fileName == lastName:
+        count += 1
+    else:
+        count = 0
+        if (i+1) < len(newFileList):
+            nextName = os.path.basename(newFileList[i+1][0])
+            if fileName == nextName:
+                count = 1
     
+    if count!=0:
+        newFileName = fileExt[0] + '_' + f'{str(count):0>2}' + fileExt[1].lower()
+        newName = os.path.join(filePath, newFileName)
+    
+    print(i, "BaseName: ", fileName, " NewName: ", newName, " OriginalName: ", originalName)
+    os.rename(originalName, newName)
+
+    lastName = fileName
